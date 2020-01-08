@@ -22,3 +22,20 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 suite.iml
+backend/src/main/webapp/resources/database-dev.properties
+backend/src/main/webapp/resources/database-prod.properties
+backend/src/main/webapp/resources/database-stand.properties
+backend/src/main/webapp/static/a/js
+backend/src/main/webapp/static/a/css
+backend/src/main/webapp/static/a/fonts
+backend/src/main/webapp/static/a/images
+backend/target
+*.iml
+backend/src/main/webapp/WEB-INF/com/ub/ok
+backend/src/main/webapp/WEB-INF/com/ub/google
+backend/src/main/webapp/WEB-INF/com/ub/fb
+backend/src/main/webapp/WEB-INF/com/ub/vk
+backend/src/main/webapp/WEB-INF/com/ub/core
+backend/src/main/webapp/WEB-INF/com/ub/twitter
+backend/src/main/webapp/WEB-INF/com/ub/linkedin
+backend/src/main/webapp/WEB-INF/com/ub/googletest.jsp
