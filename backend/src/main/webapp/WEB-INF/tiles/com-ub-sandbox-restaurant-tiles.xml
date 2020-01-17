@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <!-- <definition name="tech.maslov.sandbox.client.restaurant.all" extends="tech.maslov.sandbox.client.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/client/restaurant/all.jsp"/>
+    </definition> -->
+
+    <!--ADMIN-->
+    <definition name="tech.maslov.sandbox.admin.restaurant.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/restaurant/all.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.restaurant.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/restaurant/add.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.restaurant.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/restaurant/edit.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.restaurant.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/restaurant/delete.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.restaurant.modal.parent"
+        template="/WEB-INF/tech/maslov/sandbox/admin/restaurant/modalResponse.jsp">
+    </definition>
+
+</tiles-definitions>

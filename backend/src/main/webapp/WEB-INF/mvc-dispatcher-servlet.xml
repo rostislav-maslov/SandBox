@@ -31,6 +31,8 @@
             dbname="${mongo.db}" mongo-ref="mongoClient"/>
 
     <import resource="servlet/com-ub-core-servlet.xml"/>
+    <context:component-scan base-package="tech.maslov"/>
+    <mongo:repositories base-package="tech.maslov.*"/>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">

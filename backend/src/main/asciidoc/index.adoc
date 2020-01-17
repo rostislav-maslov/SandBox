@@ -125,3 +125,49 @@ include::{snippets}/category/all/http-response.adoc[]
 
 include::{snippets}/category/all/response-fields.adoc[]
 
+[[product-all]]
+== Товары
+
+=== Все
+
+`GET` Получение всех товаров
+
+==== Пример запроса
+
+include::{snippets}/product/all/curl-request.adoc[]
+
+==== Поля запроса
+
+include::{snippets}/product/all/request-fields.adoc[]
+
+==== Пример ответа
+
+include::{snippets}/product/all/http-response.adoc[]
+
+==== Поля ответа
+
+include::{snippets}/product/all/response-fields.adoc[]
+
+[[restaurant-all]]
+== Рестораны
+
+=== Все
+
+`GET` Получение всех ресторанов
+
+==== Пример запроса
+
+include::{snippets}/restaurant/all/curl-request.adoc[]
+
+==== Поля запроса
+
+include::{snippets}/restaurant/all/request-fields.adoc[]
+
+==== Пример ответа
+
+include::{snippets}/restaurant/all/http-response.adoc[]
+
+==== Поля ответа
+
+include::{snippets}/restaurant/all/response-fields.adoc[]
+

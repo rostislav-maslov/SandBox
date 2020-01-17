@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <!-- <definition name="tech.maslov.sandbox.client.product.all" extends="tech.maslov.sandbox.client.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/client/product/all.jsp"/>
+    </definition> -->
+
+    <!--ADMIN-->
+    <definition name="tech.maslov.sandbox.admin.product.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/product/all.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.product.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/product/add.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.product.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/product/edit.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.product.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/product/delete.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.product.modal.parent"
+        template="/WEB-INF/tech/maslov/sandbox/admin/product/modalResponse.jsp">
+    </definition>
+
+</tiles-definitions>
