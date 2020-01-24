@@ -6,6 +6,7 @@ import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
 import tech.maslov.sandbox.client.models.ClientDoc;
 import tech.maslov.sandbox.client.events.IClientEvent;
+import tech.maslov.sandbox.client.roles.ClientRole;
 import tech.maslov.sandbox.client.views.all.SearchClientAdminRequest;
 import tech.maslov.sandbox.client.views.all.SearchClientAdminResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class ClientService {
         if(userDoc == null){
             userDoc = new UserDoc();
             userDoc.setPhoneNumber(phoneNumber);
+            userDoc.getRoles().add(new ClientRole());
             try {
                 userDoc = userService.save(userDoc);
             } catch (UserExistException ignore) {
@@ -65,6 +67,13 @@ public class ClientService {
             clientDoc.setUserId(userDoc.getId());
             clientDoc.setPhoneNumber(phoneNumber);
             clientDoc = save(clientDoc);
+
+            userDoc.getRoles().add(new ClientRole());
+            try {
+                userService.save(userDoc);
+            } catch (UserExistException e) {
+                e.printStackTrace();
+            }
         }
 
         return clientDoc;

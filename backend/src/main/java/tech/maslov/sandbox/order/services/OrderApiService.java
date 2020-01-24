@@ -183,6 +183,7 @@ public class OrderApiService {
         response.setCurrentPosition(deliveryInfo.getCurrentPosition());
         response.setAddress(deliveryInfo.getAddress());
         response.setDeliveryCost(deliveryInfo.getDeliveryCost());
+        response.setCourierId(deliveryInfo.getCourierId() != null ? deliveryInfo.getCourierId().toString() : null);
 
         return response;
     }

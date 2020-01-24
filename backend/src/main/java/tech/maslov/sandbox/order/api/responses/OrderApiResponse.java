@@ -109,6 +109,7 @@ public class OrderApiResponse {
         private Point currentPosition = new Point();
         private tech.maslov.sandbox.order.models.DeliveryInfo.Address address = new tech.maslov.sandbox.order.models.DeliveryInfo.Address();
         private Double deliveryCost = 0.;
+        private String courierId;
 
         public tech.maslov.sandbox.order.models.DeliveryInfo.TYPE getType() {
             return type;
@@ -148,6 +149,14 @@ public class OrderApiResponse {
 
         public void setDeliveryCost(Double deliveryCost) {
             this.deliveryCost = deliveryCost;
+        }
+
+        public String getCourierId() {
+            return courierId;
+        }
+
+        public void setCourierId(String courierId) {
+            this.courierId = courierId;
         }
     }
     public static class Address{

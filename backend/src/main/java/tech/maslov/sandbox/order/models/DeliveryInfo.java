@@ -92,6 +92,7 @@ public class DeliveryInfo {
     private Point currentPosition = new Point();
     private Address address = new Address();
     private Double deliveryCost = 0.;
+    private ObjectId courierId;
 
     public TYPE getType() {
         return type;
@@ -131,5 +132,13 @@ public class DeliveryInfo {
 
     public void setDeliveryCost(Double deliveryCost) {
         this.deliveryCost = deliveryCost;
+    }
+
+    public ObjectId getCourierId() {
+        return courierId;
+    }
+
+    public void setCourierId(ObjectId courierId) {
+        this.courierId = courierId;
     }
 }
