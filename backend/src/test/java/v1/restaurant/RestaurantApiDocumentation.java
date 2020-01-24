@@ -1,4 +1,4 @@
-package v1;
+package v1.restaurant;
 
 import org.bson.types.ObjectId;
 import org.junit.Before;
@@ -9,23 +9,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import tech.maslov.sandbox.category.models.CategoryDoc;
-import tech.maslov.sandbox.category.routes.CategoryApiRoutes;
-import tech.maslov.sandbox.category.services.CategoryApiService;
-import tech.maslov.sandbox.category.services.CategoryService;
+import tech.maslov.sandbox.base.models.Point;
+import tech.maslov.sandbox.product.models.ProductDoc;
+import tech.maslov.sandbox.product.routes.ProductApiRoutes;
+import tech.maslov.sandbox.product.services.ProductApiService;
+import tech.maslov.sandbox.product.services.ProductService;
+import tech.maslov.sandbox.restaurant.models.RestaurantDoc;
+import tech.maslov.sandbox.restaurant.routes.RestaurantApiRoutes;
+import tech.maslov.sandbox.restaurant.services.RestaurantApiService;
+import tech.maslov.sandbox.restaurant.services.RestaurantService;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration("/mvc-dispatcher-servlet.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CategoryApiDocumentation {
+public class RestaurantApiDocumentation {
 
     @Autowired
     private WebApplicationContext context;
@@ -44,9 +47,9 @@ public class CategoryApiDocumentation {
     private MockMvc mockMvc;
 
     @Autowired
-    private CategoryService categoryService;
+    private RestaurantService restaurantService;
     @Autowired
-    private CategoryApiService categoryApiService;
+    private RestaurantApiService restaurantApiService;
 
 
     @Before
@@ -59,35 +62,35 @@ public class CategoryApiDocumentation {
     }
 
     public void initCategories() {
-        initCategory("Роллы", "Вкусные Роллы", null, 0);
-        initCategory("Суши", "Вкусные Суши", null, 0);
-        CategoryDoc categoryDoc = initCategory("Еще", "Остальные блюда", null, 0);
-        initCategory("Десерт", "Вкусные Десерты", categoryDoc.getId(), 0);
-        initCategory("Салаты", "Вкусные Салаты", categoryDoc.getId(), 0);
+        initRestaurant("Сет Вкусный", "Состав сета вкусный.");
+        initRestaurant("Сет Очень Вкусный", "Состав сета очень вкусный.");
+        initRestaurant("Сет Самый Вкусный", "Состав сета самый вкусный.");
     }
 
-    public CategoryDoc initCategory(String title, String description, ObjectId parentId, Integer sortNumber) {
-        CategoryDoc categoryDoc = new CategoryDoc();
-        categoryDoc.setTitle(title);
-        categoryDoc.setDescription(description);
-        categoryDoc.setParentId(parentId);
-        categoryDoc.setSortNum(sortNumber);
-        categoryDoc.setPicId(new ObjectId());
-        return categoryService.save(categoryDoc);
+    public RestaurantDoc initRestaurant(String title, String description) {
+        RestaurantDoc doc = new RestaurantDoc();
+
+        doc.setTitle(title);
+        doc.setDescription(description);
+        doc.setPicId(new ObjectId());
+        doc.getPoint().setLatitude(0.0);
+        doc.getPoint().setLongitude(0.0);
+
+        return restaurantService.save(doc);
     }
 
     @Test
-    public void testStreetSuggestions() throws Exception {
-        mockMvc.perform(get(CategoryApiRoutes.ALL)
+    public void testAll() throws Exception {
+        mockMvc.perform(get(RestaurantApiRoutes.ALL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("category/all",
+                .andDo(document("restaurant/all",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         requestParameters(
                         ))
                 )
-                .andDo(document("category/all",
+                .andDo(document("restaurant/all",
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         responseFields(
                                 fieldWithPath("result")
@@ -112,18 +115,26 @@ public class CategoryApiDocumentation {
                                         .optional()
                                         .type(ObjectId.class)
                                         .description("ID картинки категории; /pics/{picId}"),
-                                fieldWithPath("result.items[].parentId")
+                                fieldWithPath("result.items[].categoryId")
                                         .optional()
                                         .type(ObjectId.class)
-                                        .description("ID родительской категории"),
-                                fieldWithPath("result.items[].sortNum")
+                                        .description("ID категории"),
+                                fieldWithPath("result.items[].point")
                                         .optional()
-                                        .type(Integer.class)
-                                        .description("Порядковый номер"),
+                                        .type(Object.class)
+                                        .description("Местоположение ресторана"),
+                                fieldWithPath("result.items[].point.longitude")
+                                        .optional()
+                                        .type(Double.class)
+                                        .description("longitude"),
+                                fieldWithPath("result.items[].point.latitude")
+                                        .optional()
+                                        .type(Double.class)
+                                        .description("latitude"),
                                 fieldWithPath("result.items[].available")
                                         .optional()
                                         .type(Boolean.class)
-                                        .description("Активная категория или нет"),
+                                        .description("Активный товар или нет"),
 
 
                                 fieldWithPath("error")

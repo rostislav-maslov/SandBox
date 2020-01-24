@@ -171,3 +171,53 @@ include::{snippets}/restaurant/all/http-response.adoc[]
 
 include::{snippets}/restaurant/all/response-fields.adoc[]
 
+
+[[client-login]]
+== Клиент/Гость
+
+=== Авторизация
+`POST` Авторизация гостя в системе
+
+==== Пример запроса
+include::{snippets}/client/login/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/client/login/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/client/login/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/client/login/response-fields.adoc[]
+
+=== Получение информации о госте
+`GET` Получить информацию о госте
+
+==== Пример запроса
+include::{snippets}/client/get/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/client/get/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/client/get/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/client/get/response-fields.adoc[]
+
+
+=== Получить список гостей
+`GET` Получить список гостей
+
+==== Пример запроса
+include::{snippets}/client/list/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/client/list/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/client/list/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/client/list/response-fields.adoc[]
+

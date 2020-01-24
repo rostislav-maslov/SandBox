@@ -12,6 +12,12 @@ public class BaseApiResponse<T> {
         this.result = result;
     }
 
+    public static BaseApiResponse error(BaseErrorResponse error){
+        BaseApiResponse response = new BaseApiResponse(null);
+        response.setError(error);
+        return response;
+    }
+
     public static<T> BaseApiResponse of(T result){
         return new BaseApiResponse(result);
     }

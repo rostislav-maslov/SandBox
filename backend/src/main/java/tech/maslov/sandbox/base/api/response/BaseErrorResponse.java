@@ -5,6 +5,22 @@ public class BaseErrorResponse {
     private Integer code = -1;
     private String message;
 
+    public static BaseErrorResponse auth(){
+        BaseErrorResponse response = new BaseErrorResponse();
+        response.setSuccess(false);
+        response.setCode(403);
+        response.setMessage("Ошибка авторизации. Проверьте код подтверждения.");
+        return response;
+    }
+
+    public static BaseErrorResponse userNotFound(){
+        BaseErrorResponse response = new BaseErrorResponse();
+        response.setSuccess(false);
+        response.setCode(404);
+        response.setMessage("Такой клиент не найден");
+        return response;
+    }
+
     public Boolean getSuccess() {
         return success;
     }

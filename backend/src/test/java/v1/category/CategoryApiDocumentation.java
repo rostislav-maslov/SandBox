@@ -1,4 +1,4 @@
-package v1;
+package v1.category;
 
 import org.bson.types.ObjectId;
 import org.junit.Before;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -19,16 +20,12 @@ import tech.maslov.sandbox.category.models.CategoryDoc;
 import tech.maslov.sandbox.category.routes.CategoryApiRoutes;
 import tech.maslov.sandbox.category.services.CategoryApiService;
 import tech.maslov.sandbox.category.services.CategoryService;
-import tech.maslov.sandbox.product.api.response.ProductApiResponse;
-import tech.maslov.sandbox.product.models.ProductDoc;
-import tech.maslov.sandbox.product.routes.ProductApiRoutes;
-import tech.maslov.sandbox.product.services.ProductApiService;
-import tech.maslov.sandbox.product.services.ProductService;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration("/mvc-dispatcher-servlet.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ProductApiDocumentation {
+public class CategoryApiDocumentation {
 
     @Autowired
     private WebApplicationContext context;
@@ -47,9 +44,9 @@ public class ProductApiDocumentation {
     private MockMvc mockMvc;
 
     @Autowired
-    private ProductService productService;
+    private CategoryService categoryService;
     @Autowired
-    private ProductApiService productApiService;
+    private CategoryApiService categoryApiService;
 
 
     @Before
@@ -58,39 +55,39 @@ public class ProductApiDocumentation {
                 .apply(documentationConfiguration(this.restDocumentation))
                 .build();
 
-        initProducts();
+        initCategories();
     }
 
-    public void initProducts() {
-        initProduct("Сет Вкусный", "Состав сета вкусный.", 100.);
-        initProduct("Сет Очень Вкусный", "Состав сета очень вкусный.", 200.);
-        initProduct("Сет Самый Вкусный", "Состав сета самый вкусный.", 300.);
+    public void initCategories() {
+        initCategory("Роллы", "Вкусные Роллы", null, 0);
+        initCategory("Суши", "Вкусные Суши", null, 0);
+        CategoryDoc categoryDoc = initCategory("Еще", "Остальные блюда", null, 0);
+        initCategory("Десерт", "Вкусные Десерты", categoryDoc.getId(), 0);
+        initCategory("Салаты", "Вкусные Салаты", categoryDoc.getId(), 0);
     }
 
-    public ProductDoc initProduct(String title, String description, Double price) {
-        ProductDoc doc = new ProductDoc();
-
-        doc.setTitle(title);
-        doc.setDescription(description);
-        doc.setPicId(new ObjectId());
-        doc.setCategoryId(new ObjectId());
-        doc.setPrice(price);
-
-        return productService.save(doc);
+    public CategoryDoc initCategory(String title, String description, ObjectId parentId, Integer sortNumber) {
+        CategoryDoc categoryDoc = new CategoryDoc();
+        categoryDoc.setTitle(title);
+        categoryDoc.setDescription(description);
+        categoryDoc.setParentId(parentId);
+        categoryDoc.setSortNum(sortNumber);
+        categoryDoc.setPicId(new ObjectId());
+        return categoryService.save(categoryDoc);
     }
 
     @Test
-    public void testAll() throws Exception {
-        mockMvc.perform(get(ProductApiRoutes.ALL)
+    public void categoryAll() throws Exception {
+        mockMvc.perform(get(CategoryApiRoutes.ALL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("product/all",
+                .andDo(document("category/all",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         requestParameters(
                         ))
                 )
-                .andDo(document("product/all",
+                .andDo(document("category/all",
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         responseFields(
                                 fieldWithPath("result")
@@ -115,18 +112,18 @@ public class ProductApiDocumentation {
                                         .optional()
                                         .type(ObjectId.class)
                                         .description("ID картинки категории; /pics/{picId}"),
-                                fieldWithPath("result.items[].categoryId")
+                                fieldWithPath("result.items[].parentId")
                                         .optional()
                                         .type(ObjectId.class)
-                                        .description("ID категории"),
-                                fieldWithPath("result.items[].price")
+                                        .description("ID родительской категории"),
+                                fieldWithPath("result.items[].sortNum")
                                         .optional()
-                                        .type(Double.class)
-                                        .description("Цена товара"),
+                                        .type(Integer.class)
+                                        .description("Порядковый номер"),
                                 fieldWithPath("result.items[].available")
                                         .optional()
                                         .type(Boolean.class)
-                                        .description("Активный товар или нет"),
+                                        .description("Активная категория или нет"),
 
 
                                 fieldWithPath("error")

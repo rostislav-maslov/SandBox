@@ -1,4 +1,4 @@
-package v1;
+package v1.product;
 
 import org.bson.types.ObjectId;
 import org.junit.Before;
@@ -15,15 +15,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import tech.maslov.sandbox.base.models.Point;
+import tech.maslov.sandbox.category.models.CategoryDoc;
+import tech.maslov.sandbox.category.routes.CategoryApiRoutes;
+import tech.maslov.sandbox.category.services.CategoryApiService;
+import tech.maslov.sandbox.category.services.CategoryService;
+import tech.maslov.sandbox.product.api.response.ProductApiResponse;
 import tech.maslov.sandbox.product.models.ProductDoc;
 import tech.maslov.sandbox.product.routes.ProductApiRoutes;
 import tech.maslov.sandbox.product.services.ProductApiService;
 import tech.maslov.sandbox.product.services.ProductService;
-import tech.maslov.sandbox.restaurant.models.RestaurantDoc;
-import tech.maslov.sandbox.restaurant.routes.RestaurantApiRoutes;
-import tech.maslov.sandbox.restaurant.services.RestaurantApiService;
-import tech.maslov.sandbox.restaurant.services.RestaurantService;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration("/mvc-dispatcher-servlet.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class RestaurantApiDocumentation {
+public class ProductApiDocumentation {
 
     @Autowired
     private WebApplicationContext context;
@@ -47,9 +47,9 @@ public class RestaurantApiDocumentation {
     private MockMvc mockMvc;
 
     @Autowired
-    private RestaurantService restaurantService;
+    private ProductService productService;
     @Autowired
-    private RestaurantApiService restaurantApiService;
+    private ProductApiService productApiService;
 
 
     @Before
@@ -58,39 +58,39 @@ public class RestaurantApiDocumentation {
                 .apply(documentationConfiguration(this.restDocumentation))
                 .build();
 
-        initCategories();
+        initProducts();
     }
 
-    public void initCategories() {
-        initRestaurant("Сет Вкусный", "Состав сета вкусный.");
-        initRestaurant("Сет Очень Вкусный", "Состав сета очень вкусный.");
-        initRestaurant("Сет Самый Вкусный", "Состав сета самый вкусный.");
+    public void initProducts() {
+        initProduct("Сет Вкусный", "Состав сета вкусный.", 100.);
+        initProduct("Сет Очень Вкусный", "Состав сета очень вкусный.", 200.);
+        initProduct("Сет Самый Вкусный", "Состав сета самый вкусный.", 300.);
     }
 
-    public RestaurantDoc initRestaurant(String title, String description) {
-        RestaurantDoc doc = new RestaurantDoc();
+    public ProductDoc initProduct(String title, String description, Double price) {
+        ProductDoc doc = new ProductDoc();
 
         doc.setTitle(title);
         doc.setDescription(description);
         doc.setPicId(new ObjectId());
-        doc.getPoint().setLatitude(0.0);
-        doc.getPoint().setLongitude(0.0);
+        doc.setCategoryId(new ObjectId());
+        doc.setPrice(price);
 
-        return restaurantService.save(doc);
+        return productService.save(doc);
     }
 
     @Test
     public void testAll() throws Exception {
-        mockMvc.perform(get(RestaurantApiRoutes.ALL)
+        mockMvc.perform(get(ProductApiRoutes.ALL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("restaurant/all",
+                .andDo(document("product/all",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         requestParameters(
                         ))
                 )
-                .andDo(document("restaurant/all",
+                .andDo(document("product/all",
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         responseFields(
                                 fieldWithPath("result")
@@ -119,18 +119,10 @@ public class RestaurantApiDocumentation {
                                         .optional()
                                         .type(ObjectId.class)
                                         .description("ID категории"),
-                                fieldWithPath("result.items[].point")
-                                        .optional()
-                                        .type(Object.class)
-                                        .description("Местоположение ресторана"),
-                                fieldWithPath("result.items[].point.longitude")
+                                fieldWithPath("result.items[].price")
                                         .optional()
                                         .type(Double.class)
-                                        .description("longitude"),
-                                fieldWithPath("result.items[].point.latitude")
-                                        .optional()
-                                        .type(Double.class)
-                                        .description("latitude"),
+                                        .description("Цена товара"),
                                 fieldWithPath("result.items[].available")
                                         .optional()
                                         .type(Boolean.class)

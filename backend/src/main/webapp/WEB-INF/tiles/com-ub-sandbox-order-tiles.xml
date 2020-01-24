@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <!-- <definition name="tech.maslov.sandbox.client.order.all" extends="tech.maslov.sandbox.client.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/client/order/all.jsp"/>
+    </definition> -->
+    <definition name="tech.maslov.sandbox.client.order.pay" template="/WEB-INF/tech/maslov/sandbox/client/order/pay.jsp">
+    </definition>
+    <definition name="tech.maslov.sandbox.client.order.result" template="/WEB-INF/tech/maslov/sandbox/client/order/result.jsp">
+    </definition>
+
+    <!--ADMIN-->
+    <definition name="tech.maslov.sandbox.admin.order.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/order/all.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.order.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/order/add.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.order.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/order/edit.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.order.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/order/delete.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.order.modal.parent"
+                template="/WEB-INF/tech/maslov/sandbox/admin/order/modalResponse.jsp">
+    </definition>
+
+</tiles-definitions>
