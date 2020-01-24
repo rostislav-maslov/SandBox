@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import tech.maslov.sandbox.base.api.response.ListApiResponse;
 import tech.maslov.sandbox.base.models.Point;
 import tech.maslov.sandbox.client.models.ClientDoc;
+import tech.maslov.sandbox.order.api.requests.OrderCourierSetApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCreateApiRequest;
 import tech.maslov.sandbox.order.api.responses.OrderApiResponse;
 import tech.maslov.sandbox.order.models.*;
@@ -239,10 +240,7 @@ public class OrderApiService {
         return transform(orderDoc);
     }
 
-    public ListApiResponse<OrderApiResponse> list(Integer size,  Integer skip){
-        List<OrderDoc> orderDocs = orderService.findAll(size, skip);
-        Long count = orderService.count(new Query());
-
+    private ListApiResponse<OrderApiResponse> transform(List<OrderDoc> orderDocs,Long count){
         ListApiResponse<OrderApiResponse> response = new ListApiResponse<>();
         response.setItems(new ArrayList<OrderApiResponse>());
         response.setTotal(count);
@@ -252,5 +250,30 @@ public class OrderApiService {
         }
 
         return response;
+    }
+
+    public ListApiResponse<OrderApiResponse> list(Integer size,  Integer skip){
+        List<OrderDoc> orderDocs = orderService.findAll(size, skip);
+        Long count = orderService.count(new Query());
+
+        return transform(orderDocs, count);
+    }
+
+    public OrderApiResponse courierSet(OrderCourierSetApiRequest request){
+        OrderDoc orderDoc = orderService.findById(request.getId());
+        orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
+        orderDoc.getDeliveryInfo().setStatus(request.getStatus());
+        orderDoc.getDeliveryInfo().setCurrentPosition(request.getCurrentPosition());
+
+        orderService.save(orderDoc);
+
+        return transform(orderDoc);
+    }
+
+    public ListApiResponse<OrderApiResponse> courierOrders(ObjectId courierId, Integer size, Integer skip){
+        List<OrderDoc> orderDocs = orderService.findAll(courierId, size, skip);
+        Long count = orderService.count(courierId);
+
+        return transform(orderDocs, count);
     }
 }

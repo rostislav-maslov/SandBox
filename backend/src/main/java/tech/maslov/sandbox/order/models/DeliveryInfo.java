@@ -4,6 +4,10 @@ import org.bson.types.ObjectId;
 import tech.maslov.sandbox.base.models.Point;
 
 public class DeliveryInfo {
+    public enum STATUS{
+        CONFIRMED, COOK, READY, DELIVER, CLOSED
+    }
+
     public enum TYPE {
         DELIVERY, PICKUP
     }
@@ -88,6 +92,7 @@ public class DeliveryInfo {
     }
 
     private TYPE type;
+    private STATUS status = STATUS.CONFIRMED;
     private ObjectId restaurantId;
     private Point currentPosition = new Point();
     private Address address = new Address();
@@ -140,5 +145,13 @@ public class DeliveryInfo {
 
     public void setCourierId(ObjectId courierId) {
         this.courierId = courierId;
+    }
+
+    public STATUS getStatus() {
+        return status;
+    }
+
+    public void setStatus(STATUS status) {
+        this.status = status;
     }
 }

@@ -51,6 +51,12 @@ public class OrderService {
         callAfterDelete(doc);
     }
 
+    public Long count(ObjectId courierId){
+        return mongoTemplate.count(new Query(
+                Criteria.where("deliveryInfo.courierId").is(courierId)
+        ), OrderDoc.class);
+    }
+
     public Long count(Query query) {
         return mongoTemplate.count(query, OrderDoc.class);
     }
@@ -58,6 +64,18 @@ public class OrderService {
     public List<OrderDoc> findAll(Integer size,  Integer skip){
         Sort sort = new Sort(Sort.Direction.ASC, "id");
         Criteria criteria = new Criteria();
+        Query query = new Query(criteria);
+
+        query.with(sort);
+        query.limit(size);
+        query.skip(skip);
+
+        return mongoTemplate.find(query, OrderDoc.class);
+    }
+
+    public List<OrderDoc> findAll(ObjectId courierId, Integer size,  Integer skip){
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Criteria criteria = Criteria.where("deliveryInfo.courierId").is(courierId);
         Query query = new Query(criteria);
 
         query.with(sort);
