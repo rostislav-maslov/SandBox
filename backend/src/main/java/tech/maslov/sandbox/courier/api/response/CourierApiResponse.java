@@ -1,7 +1,5 @@
 package tech.maslov.sandbox.courier.api.response;
 
-import tech.maslov.sandbox.client.models.Sex;
-
 public class CourierApiResponse {
     private String id;
     private String firstName = "";

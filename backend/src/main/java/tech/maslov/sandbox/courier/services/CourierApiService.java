@@ -29,7 +29,11 @@ public class CourierApiService {
     private TokenSessionService tokenSessionService;
 
     public CourierLoginApiResponse login(CourierLoginApiRequest request) throws UserNotAutorizedException {
-        CourierDoc courierDoc = courierService.create(request.getPhoneNumber());
+        CourierDoc courierDoc = courierService.create(
+                request.getPhoneNumber(),
+                request.getFirstName(),
+                request.getLastName()
+        );
         UserDoc userDoc = userService.getUser(courierDoc.getId());
         CourierLoginApiResponse response = new CourierLoginApiResponse();
 

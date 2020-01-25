@@ -5,7 +5,7 @@ import tech.maslov.sandbox.base.models.Point;
 
 public class DeliveryInfo {
     public enum STATUS{
-        CONFIRMED, COOK, READY, DELIVER, CLOSED
+        CONFIRMED, COOK, READY, ON_THE_WAY, DELIVERED, CLOSED
     }
 
     public enum TYPE {

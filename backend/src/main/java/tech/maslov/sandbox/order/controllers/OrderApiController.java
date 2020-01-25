@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tech.maslov.sandbox.base.api.response.BaseApiResponse;
 import tech.maslov.sandbox.base.api.response.ListApiResponse;
+import tech.maslov.sandbox.order.api.requests.OrderCourierNextApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCourierSetApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCreateApiRequest;
 import tech.maslov.sandbox.order.api.responses.OrderApiResponse;
@@ -39,5 +40,10 @@ public class OrderApiController {
     @RequestMapping(value = OrderApiRoutes.COURIER, method = RequestMethod.POST)
     public BaseApiResponse<OrderApiResponse> courierSet(@RequestBody OrderCourierSetApiRequest request){
         return BaseApiResponse.of(orderApiService.courierSet(request));
+    }
+
+    @RequestMapping(value = OrderApiRoutes.COURIER_NEXT, method = RequestMethod.POST)
+    public BaseApiResponse<OrderApiResponse> courierNextOrder(@RequestBody OrderCourierNextApiRequest request){
+        return BaseApiResponse.of(orderApiService.courierNext(request));
     }
 }

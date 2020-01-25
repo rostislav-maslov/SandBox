@@ -29,7 +29,6 @@ public class ClientData {
     }
 
     public ClientData init() {
-        try {
             this.getRequestData = initClient(7958736232l, "Иван", "Иванов");
             initClient(7958736231l, "Иван", "Иванов");
             initClient(7958736233l, "Иван", "Иванов");
@@ -39,19 +38,22 @@ public class ClientData {
             initClient(7958736237l, "Иван", "Иванов");
             initClient(7958736238l, "Иван", "Иванов");
             initClient(7958736239l, "Иван", "Иванов");
-        } catch (UserExistException e) {
-            e.printStackTrace();
-        }
 
         return this;
     }
 
-    public ClientDoc initClient(Long phoneNumber, String firstName, String lastName) throws UserExistException {
-        UserDoc userDoc = new UserDoc();
-        userDoc.setPhoneNumber(phoneNumber);
-        userDoc.setFirstName(firstName);
-        userDoc.setLastName(lastName);
-        userService.save(userDoc);
+    public ClientDoc initClient(Long phoneNumber, String firstName, String lastName){
+        UserDoc userDoc = userService.findByPhone(phoneNumber);
+        try {
+            if(userDoc == null) {
+                userDoc = new UserDoc();
+                userDoc.setPhoneNumber(phoneNumber);
+                userDoc.setFirstName(firstName);
+                userDoc.setLastName(lastName);
+                userService.save(userDoc);
+            }
+        }catch (Exception ignore){}
+
 
         ClientDoc clientDoc = new ClientDoc();
         clientDoc.setId(userDoc.getId());

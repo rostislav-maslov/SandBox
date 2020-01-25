@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import tech.maslov.sandbox.base.api.response.ListApiResponse;
 import tech.maslov.sandbox.base.models.Point;
 import tech.maslov.sandbox.client.models.ClientDoc;
+import tech.maslov.sandbox.order.api.requests.OrderCourierNextApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCourierSetApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCreateApiRequest;
 import tech.maslov.sandbox.order.api.responses.OrderApiResponse;
@@ -264,6 +265,18 @@ public class OrderApiService {
         orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
         orderDoc.getDeliveryInfo().setStatus(request.getStatus());
         orderDoc.getDeliveryInfo().setCurrentPosition(request.getCurrentPosition());
+
+        orderService.save(orderDoc);
+
+        return transform(orderDoc);
+    }
+
+    public OrderApiResponse courierNext(OrderCourierNextApiRequest request){
+        OrderDoc orderDoc = orderService.findNextOrderForCourier();
+
+        orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
+        orderDoc.getDeliveryInfo().setStatus(DeliveryInfo.STATUS.ON_THE_WAY);
+        orderDoc.getDeliveryInfo().setCurrentPosition(orderDoc.getDeliveryInfo().getCurrentPosition());
 
         orderService.save(orderDoc);
 

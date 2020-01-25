@@ -7,5 +7,6 @@ public class OrderApiRoutes {
 
     public static final String CREATE = ROOT + "/create";
     public static final String PAY = CREATE + "/pay";
-    public static final String COURIER = CREATE + "/courier";
+    public static final String COURIER = ROOT + "/courier";
+    public static final String COURIER_NEXT = COURIER + "/next";
 }

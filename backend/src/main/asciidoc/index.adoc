@@ -221,3 +221,52 @@ include::{snippets}/client/list/http-response.adoc[]
 ==== Поля ответа
 include::{snippets}/client/list/response-fields.adoc[]
 
+
+[[courier-login]]
+== Курьер
+
+=== Авторизация
+`POST` Авторизация курьера
+
+==== Пример запроса
+include::{snippets}/courier/login/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/courier/login/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/courier/login/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/courier/login/response-fields.adoc[]
+
+=== Информация о курьере
+`GET` Получение информации о курьере
+
+==== Пример запроса
+include::{snippets}/courier/get/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/courier/get/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/courier/get/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/courier/get/response-fields.adoc[]
+
+=== Получить список курьеров
+`GET` Получить список курьеров
+
+==== Пример запроса
+include::{snippets}/courier/list/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/courier/list/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/courier/list/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/courier/list/response-fields.adoc[]
+

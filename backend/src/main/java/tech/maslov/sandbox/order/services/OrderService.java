@@ -1,5 +1,6 @@
 package tech.maslov.sandbox.order.services;
 
+import tech.maslov.sandbox.order.models.DeliveryInfo;
 import tech.maslov.sandbox.order.models.OrderDoc;
 import tech.maslov.sandbox.order.events.IOrderEvent;
 import tech.maslov.sandbox.order.views.all.SearchOrderAdminRequest;
@@ -83,6 +84,20 @@ public class OrderService {
         query.skip(skip);
 
         return mongoTemplate.find(query, OrderDoc.class);
+    }
+
+    public OrderDoc findNextOrderForCourier(){
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Criteria criteria = Criteria
+                .where("deliveryInfo.courierId").is(null)
+                .and("deliveryInfo.type").is(DeliveryInfo.TYPE.DELIVERY)
+                .and("deliveryInfo.status").is(DeliveryInfo.STATUS.READY);
+        Query query = new Query(criteria);
+
+        query.with(sort);
+        query.limit(1);
+
+        return mongoTemplate.findOne(query, OrderDoc.class);
     }
 
     public SearchOrderAdminResponse findAll(SearchOrderAdminRequest request) {
