@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import tech.maslov.sandbox.base.api.response.ListApiResponse;
 import tech.maslov.sandbox.base.models.Point;
 import tech.maslov.sandbox.client.models.ClientDoc;
+import tech.maslov.sandbox.client.services.ClientApiService;
 import tech.maslov.sandbox.order.api.requests.OrderCourierNextApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCourierSetApiRequest;
 import tech.maslov.sandbox.order.api.requests.OrderCreateApiRequest;
 import tech.maslov.sandbox.order.api.responses.OrderApiResponse;
 import tech.maslov.sandbox.order.models.*;
 import tech.maslov.sandbox.order.routes.OrderApiRoutes;
+import tech.maslov.sandbox.product.api.response.ProductApiResponse;
 import tech.maslov.sandbox.product.models.ProductDoc;
 import tech.maslov.sandbox.product.services.ProductApiService;
 import tech.maslov.sandbox.product.services.ProductService;
@@ -21,6 +23,7 @@ import tech.maslov.sandbox.restaurant.services.RestaurantService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class OrderApiService {
@@ -32,6 +35,7 @@ public class OrderApiService {
     private RestaurantService restaurantService;
     @Autowired
     private ProductApiService productApiService;
+    @Autowired private ClientApiService clientApiService;
 
     private ClientInfo transform(OrderCreateApiRequest.ClientInfo request) {
         ClientInfo clientInfo = new ClientInfo();
@@ -273,6 +277,7 @@ public class OrderApiService {
 
     public OrderApiResponse courierNext(OrderCourierNextApiRequest request){
         OrderDoc orderDoc = orderService.findNextOrderForCourier();
+        if(orderDoc == null) exampleOrder();
 
         orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
         orderDoc.getDeliveryInfo().setStatus(DeliveryInfo.STATUS.ON_THE_WAY);
@@ -288,5 +293,97 @@ public class OrderApiService {
         Long count = orderService.count(courierId);
 
         return transform(orderDocs, count);
+    }
+
+
+    private OrderCreateApiRequest.ClientInfo exampleOrderClientInfo(){
+        ClientDoc clientDoc = clientApiService.exampleClient();
+
+        OrderCreateApiRequest.ClientInfo clientInfo = new OrderCreateApiRequest.ClientInfo();
+        clientInfo.setClientId(clientDoc.getId());
+        clientInfo.setFirstName(clientDoc.getFirstName());
+        clientInfo.setPhoneNumber(clientDoc.getPhoneNumber());
+
+        return clientInfo;
+    }
+
+    private OrderCreateApiRequest.Basket exmapleOrderBasket(){
+        List<ProductApiResponse> allProducts = productApiService.all();
+        OrderCreateApiRequest.Basket basket = new OrderCreateApiRequest.Basket();
+
+        for(Integer i = 0; i < 5; i++){
+            Integer index = new Random().nextInt(allProducts.size() - 1);
+            ProductApiResponse prResponse = allProducts.get(index);
+            OrderCreateApiRequest.Product product = new OrderCreateApiRequest.Product();
+            product.setCount(new Random().nextInt(2) + 1);
+            product.setProductId(new ObjectId(prResponse.getId()));
+            basket.getProducts().add(product);
+        }
+
+        return basket;
+    }
+
+    private OrderCreateApiRequest.DeliveryInfo exampleOrderDelivery(){
+        OrderCreateApiRequest.DeliveryInfo deliveryInfo = new OrderCreateApiRequest.DeliveryInfo();
+
+        deliveryInfo.setType(DeliveryInfo.TYPE.DELIVERY);
+        deliveryInfo.setRestaurantId(restaurantService.example().getId());
+
+        OrderCreateApiRequest.Address address = new OrderCreateApiRequest.Address();
+        address.setCity("Волгоград");
+        address.setStreet("Университетский проспект");
+        address.setHouse("100к1");
+        address.setPorch("");
+        address.setFloor("1");
+        address.setApartment("1");
+
+        Point point = new Point();
+        point.setLatitude(48.642232);
+        point.setLongitude(44.424269);
+        address.setCoordinates(point);
+        address.setCoordinateAccuracy(DeliveryInfo.CoordinateAccuracy.EXACT);
+
+        deliveryInfo.setAddress(address);
+
+        return deliveryInfo;
+    }
+
+    private OrderCreateApiRequest.PaymentInfo examplePaymentInfo(){
+        OrderCreateApiRequest.PaymentInfo paymentInfo = new OrderCreateApiRequest.PaymentInfo();
+        paymentInfo.setChangeWith(5000.);
+        paymentInfo.setType(PaymentInfo.TYPE.CASH);
+
+        return paymentInfo;
+    }
+
+    private OrderCreateApiRequest.OrderInfo exampleOrderInfo(){
+        OrderCreateApiRequest.OrderInfo orderInfo = new OrderCreateApiRequest.OrderInfo();
+
+        orderInfo.setComment("Тестовый заказ для курьера");
+
+        return orderInfo;
+    }
+
+    public OrderDoc exampleOrder(){
+        OrderCreateApiRequest request = new OrderCreateApiRequest();
+        request.setClientInfo(exampleOrderClientInfo());
+        request.setBasket(exmapleOrderBasket());
+        request.setDeliveryInfo(exampleOrderDelivery());
+        request.setPaymentType(examplePaymentInfo());
+        request.setOrderInfo(exampleOrderInfo());
+
+        OrderApiResponse orderApiResponse = create(request);
+        return orderService.findById(new ObjectId(orderApiResponse.getId()));
+    }
+
+    public void closeAll(OrderCourierNextApiRequest request){
+        List<OrderDoc> orderDocs = orderService.findByCourier(request.getCourierId());
+
+        for(OrderDoc orderDoc : orderDocs){
+            orderDoc.getDeliveryInfo().setStatus(DeliveryInfo.STATUS.CLOSED);
+            orderService.save(orderDoc);
+        }
+
+        return;
     }
 }

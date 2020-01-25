@@ -4,6 +4,14 @@ public class ClientLoginApiRequest {
     private Long phoneNumber;
     private Integer code;
 
+    public ClientLoginApiRequest() {
+    }
+
+    public ClientLoginApiRequest(Long phoneNumber, Integer code) {
+        this.phoneNumber = phoneNumber;
+        this.code = code;
+    }
+
     public Long getPhoneNumber() {
         return phoneNumber;
     }

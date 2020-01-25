@@ -15,6 +15,7 @@ import tech.maslov.sandbox.client.api.request.ClientLoginApiRequest;
 import tech.maslov.sandbox.client.api.response.ClientApiResponse;
 import tech.maslov.sandbox.client.api.response.ClientLoginApiResponse;
 import tech.maslov.sandbox.client.models.ClientDoc;
+import tech.maslov.sandbox.client.models.Sex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,27 @@ public class ClientApiService {
         if(clientDoc == null) throw new UserNotExistException();
 
         return transform(clientDoc);
+    }
+
+    public ClientDoc exampleClient(){
+        Long phoneNumber = 79607777777l;
+
+        ClientDoc clientDoc = clientService.findByPhoneNumber(phoneNumber);
+        if(clientDoc == null){
+            ClientLoginApiRequest clientLoginApiRequest = new ClientLoginApiRequest(phoneNumber, 7777);
+            try {
+                ClientLoginApiResponse response = login(clientLoginApiRequest);
+                clientDoc = clientService.findById(new ObjectId(response.getId()));
+                clientDoc.setFirstName("Иван");
+                clientDoc.setLastName("Иванов");
+                clientDoc.setBDate("1990-10-01");
+                clientDoc.setSex(Sex.MALE);
+                clientService.save(clientDoc);
+            } catch (UserNotAutorizedException ignore) {
+            }
+        }
+
+        return clientDoc;
     }
 
     public ListApiResponse<ClientApiResponse> list(Integer size, Integer skip) throws UserNotExistException {

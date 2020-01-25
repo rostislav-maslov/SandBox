@@ -1,5 +1,6 @@
 package tech.maslov.sandbox.restaurant.services;
 
+import tech.maslov.sandbox.base.models.Point;
 import tech.maslov.sandbox.restaurant.models.RestaurantDoc;
 import tech.maslov.sandbox.restaurant.events.IRestaurantEvent;
 import tech.maslov.sandbox.restaurant.views.all.SearchRestaurantAdminRequest;
@@ -38,6 +39,28 @@ public class RestaurantService {
 
     public RestaurantDoc findById(ObjectId id) {
         return mongoTemplate.findById(id, RestaurantDoc.class);
+    }
+
+    public RestaurantDoc example(){
+        RestaurantDoc restaurantDoc = findById(ObjectId.createFromLegacyFormat(0,0,0));
+
+        if(restaurantDoc == null){
+            restaurantDoc = new RestaurantDoc();
+            restaurantDoc.setAvailable(true);
+            restaurantDoc.setDescription("Тестовый ресторан для курьеров по умолчанию");
+            restaurantDoc.setTitle("Тех ресторан");
+            restaurantDoc.setPicId(new ObjectId());
+
+            Point point = new Point();
+            point.setLatitude(48.636564);
+            point.setLongitude(44.436055);
+
+            restaurantDoc.setPoint(point);
+
+            save(restaurantDoc);
+        }
+
+        return restaurantDoc;
     }
 
     public void remove(ObjectId id) {

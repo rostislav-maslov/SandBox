@@ -2,6 +2,7 @@ package tech.maslov.sandbox.order.controllers;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tech.maslov.sandbox.base.api.response.BaseApiResponse;
 import tech.maslov.sandbox.base.api.response.ListApiResponse;
@@ -45,5 +46,11 @@ public class OrderApiController {
     @RequestMapping(value = OrderApiRoutes.COURIER_NEXT, method = RequestMethod.POST)
     public BaseApiResponse<OrderApiResponse> courierNextOrder(@RequestBody OrderCourierNextApiRequest request){
         return BaseApiResponse.of(orderApiService.courierNext(request));
+    }
+
+    @RequestMapping(value = OrderApiRoutes.COURIER_CLOSE_ALL, method = RequestMethod.POST)
+    public BaseApiResponse<String> courierCloseAll(@RequestBody OrderCourierNextApiRequest request){
+        orderApiService.closeAll(request);
+        return BaseApiResponse.of(HttpStatus.OK.toString());
     }
 }

@@ -58,6 +58,12 @@ public class OrderService {
         ), OrderDoc.class);
     }
 
+    public List<OrderDoc> findByCourier(ObjectId courierId){
+        return mongoTemplate.find(new Query(
+                Criteria.where("deliveryInfo.courierId").is(courierId)
+        ), OrderDoc.class);
+    }
+
     public Long count(Query query) {
         return mongoTemplate.count(query, OrderDoc.class);
     }
@@ -97,7 +103,7 @@ public class OrderService {
         query.with(sort);
         query.limit(1);
 
-        return mongoTemplate.findOne(query, OrderDoc.class);
+       return mongoTemplate.findOne(query, OrderDoc.class);
     }
 
     public SearchOrderAdminResponse findAll(SearchOrderAdminRequest request) {
