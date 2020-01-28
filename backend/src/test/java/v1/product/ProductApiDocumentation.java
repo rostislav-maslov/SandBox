@@ -58,25 +58,7 @@ public class ProductApiDocumentation {
                 .apply(documentationConfiguration(this.restDocumentation))
                 .build();
 
-        initProducts();
-    }
-
-    public void initProducts() {
-        initProduct("Сет Вкусный", "Состав сета вкусный.", 100.);
-        initProduct("Сет Очень Вкусный", "Состав сета очень вкусный.", 200.);
-        initProduct("Сет Самый Вкусный", "Состав сета самый вкусный.", 300.);
-    }
-
-    public ProductDoc initProduct(String title, String description, Double price) {
-        ProductDoc doc = new ProductDoc();
-
-        doc.setTitle(title);
-        doc.setDescription(description);
-        doc.setPicId(new ObjectId());
-        doc.setCategoryId(new ObjectId());
-        doc.setPrice(price);
-
-        return productService.save(doc);
+        ProductData.instance(productService).init();
     }
 
     @Test

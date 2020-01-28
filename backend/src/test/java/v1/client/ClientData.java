@@ -2,10 +2,6 @@ package v1.client;
 
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.UserService;
-import com.ub.core.user.service.exceptions.UserExistException;
-import org.bson.types.ObjectId;
-import tech.maslov.sandbox.category.models.CategoryDoc;
-import tech.maslov.sandbox.client.api.request.ClientLoginApiRequest;
 import tech.maslov.sandbox.client.models.ClientDoc;
 import tech.maslov.sandbox.client.services.ClientApiService;
 import tech.maslov.sandbox.client.services.ClientService;
@@ -21,11 +17,17 @@ public class ClientData {
             ClientService clientService,
             ClientApiService clientApiService,
             UserService userService){
-        ClientData data =  new ClientData();
+        ClientData data =  new ClientData(clientService, clientApiService, userService);
         data.clientService = clientService;
         data.clientApiService = clientApiService;
         data.userService = userService;
         return data;
+    }
+
+    public ClientData(ClientService clientService, ClientApiService clientApiService, UserService userService) {
+        this.clientService = clientService;
+        this.clientApiService = clientApiService;
+        this.userService = userService;
     }
 
     public ClientData init() {

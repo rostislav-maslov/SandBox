@@ -92,6 +92,31 @@ public class OrderService {
         return mongoTemplate.find(query, OrderDoc.class);
     }
 
+    public List<OrderDoc> findByRestaurant(){
+        Criteria criteria = Criteria
+                .where("deliveryInfo.restaurantId").is(null);
+        Query query = new Query(criteria);
+        query.limit(20);
+        return mongoTemplate.find(query, OrderDoc.class);
+    }
+
+    public List<OrderDoc> findByStatus(DeliveryInfo.STATUS status){
+        Criteria criteria = Criteria
+                .where("deliveryInfo.status").is(status);
+        Query query = new Query(criteria);
+        query.limit(20);
+        return mongoTemplate.find(query, OrderDoc.class);
+    }
+
+    public List<OrderDoc> findByStatusAndType(DeliveryInfo.STATUS status, DeliveryInfo.TYPE type){
+        Criteria criteria = Criteria
+                .where("deliveryInfo.status").is(status)
+                .and("deliveryInfo.type").is(type);
+        Query query = new Query(criteria);
+        query.limit(20);
+        return mongoTemplate.find(query, OrderDoc.class);
+    }
+
     public OrderDoc findNextOrderForCourier(){
         Sort sort = new Sort(Sort.Direction.ASC, "id");
         Criteria criteria = Criteria

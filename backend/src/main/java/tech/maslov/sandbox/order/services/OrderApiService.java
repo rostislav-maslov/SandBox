@@ -19,6 +19,7 @@ import tech.maslov.sandbox.product.api.response.ProductApiResponse;
 import tech.maslov.sandbox.product.models.ProductDoc;
 import tech.maslov.sandbox.product.services.ProductApiService;
 import tech.maslov.sandbox.product.services.ProductService;
+import tech.maslov.sandbox.restaurant.models.RestaurantDoc;
 import tech.maslov.sandbox.restaurant.services.RestaurantService;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class OrderApiService {
     private RestaurantService restaurantService;
     @Autowired
     private ProductApiService productApiService;
-    @Autowired private ClientApiService clientApiService;
+    @Autowired
+    private ClientApiService clientApiService;
 
     private ClientInfo transform(OrderCreateApiRequest.ClientInfo request) {
         ClientInfo clientInfo = new ClientInfo();
@@ -69,6 +71,8 @@ public class OrderApiService {
     }
 
     private DeliveryInfo.Address transform(OrderCreateApiRequest.Address request) {
+        if (request == null) return null;
+
         DeliveryInfo.Address address = new DeliveryInfo.Address();
 
         address.setCity(request.getCity());
@@ -91,6 +95,11 @@ public class OrderApiService {
         deliveryInfo.setCurrentPosition(new Point());
         deliveryInfo.setAddress(transform(request.getAddress()));
         deliveryInfo.setDeliveryCost(0.);
+
+        if (request.getRestaurantId() != null) {
+            RestaurantDoc restaurantDoc = restaurantService.findById(request.getRestaurantId());
+            deliveryInfo.setCurrentPosition(restaurantDoc.getPoint());
+        }
 
         return deliveryInfo;
     }
@@ -215,7 +224,7 @@ public class OrderApiService {
         return response;
     }
 
-    private OrderApiResponse.OrderInfo transform(OrderInfo orderInfo){
+    private OrderApiResponse.OrderInfo transform(OrderInfo orderInfo) {
         OrderApiResponse.OrderInfo response = new OrderApiResponse.OrderInfo();
 
         response.setComment(orderInfo.getComment());
@@ -227,6 +236,7 @@ public class OrderApiService {
         OrderApiResponse response = new OrderApiResponse();
 
         response.setId(doc.getId().toString());
+        response.setNumber(doc.getNumber());
 
         response.setClientInfo(transform(doc.getClientInfo()));
         response.setBasket(transform(doc.getBasket()));
@@ -245,26 +255,26 @@ public class OrderApiService {
         return transform(orderDoc);
     }
 
-    private ListApiResponse<OrderApiResponse> transform(List<OrderDoc> orderDocs,Long count){
+    private ListApiResponse<OrderApiResponse> transform(List<OrderDoc> orderDocs, Long count) {
         ListApiResponse<OrderApiResponse> response = new ListApiResponse<>();
         response.setItems(new ArrayList<OrderApiResponse>());
         response.setTotal(count);
 
-        for(OrderDoc orderDoc: orderDocs){
+        for (OrderDoc orderDoc : orderDocs) {
             response.getItems().add(transform(orderDoc));
         }
 
         return response;
     }
 
-    public ListApiResponse<OrderApiResponse> list(Integer size,  Integer skip){
+    public ListApiResponse<OrderApiResponse> list(Integer size, Integer skip) {
         List<OrderDoc> orderDocs = orderService.findAll(size, skip);
         Long count = orderService.count(new Query());
 
         return transform(orderDocs, count);
     }
 
-    public OrderApiResponse courierSet(OrderCourierSetApiRequest request){
+    public OrderApiResponse courierSet(OrderCourierSetApiRequest request) {
         OrderDoc orderDoc = orderService.findById(request.getId());
         orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
         orderDoc.getDeliveryInfo().setStatus(request.getStatus());
@@ -275,9 +285,9 @@ public class OrderApiService {
         return transform(orderDoc);
     }
 
-    public OrderApiResponse courierNext(OrderCourierNextApiRequest request){
+    public OrderApiResponse courierNext(OrderCourierNextApiRequest request) {
         OrderDoc orderDoc = orderService.findNextOrderForCourier();
-        if(orderDoc == null) exampleOrder();
+        if (orderDoc == null) orderDoc = exampleOrder();
 
         orderDoc.getDeliveryInfo().setCourierId(request.getCourierId());
         orderDoc.getDeliveryInfo().setStatus(DeliveryInfo.STATUS.ON_THE_WAY);
@@ -288,7 +298,7 @@ public class OrderApiService {
         return transform(orderDoc);
     }
 
-    public ListApiResponse<OrderApiResponse> courierOrders(ObjectId courierId, Integer size, Integer skip){
+    public ListApiResponse<OrderApiResponse> courierOrders(ObjectId courierId, Integer size, Integer skip) {
         List<OrderDoc> orderDocs = orderService.findAll(courierId, size, skip);
         Long count = orderService.count(courierId);
 
@@ -296,7 +306,7 @@ public class OrderApiService {
     }
 
 
-    private OrderCreateApiRequest.ClientInfo exampleOrderClientInfo(){
+    private OrderCreateApiRequest.ClientInfo exampleOrderClientInfo() {
         ClientDoc clientDoc = clientApiService.exampleClient();
 
         OrderCreateApiRequest.ClientInfo clientInfo = new OrderCreateApiRequest.ClientInfo();
@@ -307,12 +317,12 @@ public class OrderApiService {
         return clientInfo;
     }
 
-    private OrderCreateApiRequest.Basket exmapleOrderBasket(){
+    private OrderCreateApiRequest.Basket exmapleOrderBasket() {
         List<ProductApiResponse> allProducts = productApiService.all();
         OrderCreateApiRequest.Basket basket = new OrderCreateApiRequest.Basket();
 
-        for(Integer i = 0; i < 5; i++){
-            Integer index = new Random().nextInt(allProducts.size() - 1);
+        for (Integer i = 0; i < 5; i++) {
+            Integer index = new Random().nextInt(allProducts.size());
             ProductApiResponse prResponse = allProducts.get(index);
             OrderCreateApiRequest.Product product = new OrderCreateApiRequest.Product();
             product.setCount(new Random().nextInt(2) + 1);
@@ -323,7 +333,7 @@ public class OrderApiService {
         return basket;
     }
 
-    private OrderCreateApiRequest.DeliveryInfo exampleOrderDelivery(){
+    private OrderCreateApiRequest.DeliveryInfo exampleOrderDelivery() {
         OrderCreateApiRequest.DeliveryInfo deliveryInfo = new OrderCreateApiRequest.DeliveryInfo();
 
         deliveryInfo.setType(DeliveryInfo.TYPE.DELIVERY);
@@ -348,7 +358,7 @@ public class OrderApiService {
         return deliveryInfo;
     }
 
-    private OrderCreateApiRequest.PaymentInfo examplePaymentInfo(){
+    private OrderCreateApiRequest.PaymentInfo examplePaymentInfo() {
         OrderCreateApiRequest.PaymentInfo paymentInfo = new OrderCreateApiRequest.PaymentInfo();
         paymentInfo.setChangeWith(5000.);
         paymentInfo.setType(PaymentInfo.TYPE.CASH);
@@ -356,7 +366,7 @@ public class OrderApiService {
         return paymentInfo;
     }
 
-    private OrderCreateApiRequest.OrderInfo exampleOrderInfo(){
+    private OrderCreateApiRequest.OrderInfo exampleOrderInfo() {
         OrderCreateApiRequest.OrderInfo orderInfo = new OrderCreateApiRequest.OrderInfo();
 
         orderInfo.setComment("Тестовый заказ для курьера");
@@ -364,7 +374,7 @@ public class OrderApiService {
         return orderInfo;
     }
 
-    public OrderDoc exampleOrder(){
+    public OrderDoc exampleOrder() {
         OrderCreateApiRequest request = new OrderCreateApiRequest();
         request.setClientInfo(exampleOrderClientInfo());
         request.setBasket(exmapleOrderBasket());
@@ -376,10 +386,10 @@ public class OrderApiService {
         return orderService.findById(new ObjectId(orderApiResponse.getId()));
     }
 
-    public void closeAll(OrderCourierNextApiRequest request){
+    public void closeAll(OrderCourierNextApiRequest request) {
         List<OrderDoc> orderDocs = orderService.findByCourier(request.getCourierId());
 
-        for(OrderDoc orderDoc : orderDocs){
+        for (OrderDoc orderDoc : orderDocs) {
             orderDoc.getDeliveryInfo().setStatus(DeliveryInfo.STATUS.CLOSED);
             orderService.save(orderDoc);
         }

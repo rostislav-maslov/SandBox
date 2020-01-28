@@ -51,6 +51,7 @@ public class RestaurantApiDocumentation {
     @Autowired
     private RestaurantApiService restaurantApiService;
 
+    private RestaurantData restaurantData;
 
     @Before
     public void setUp() {
@@ -58,26 +59,10 @@ public class RestaurantApiDocumentation {
                 .apply(documentationConfiguration(this.restDocumentation))
                 .build();
 
-        initCategories();
+        this.restaurantData = RestaurantData.instance(restaurantService).init();
     }
 
-    public void initCategories() {
-        initRestaurant("Сет Вкусный", "Состав сета вкусный.");
-        initRestaurant("Сет Очень Вкусный", "Состав сета очень вкусный.");
-        initRestaurant("Сет Самый Вкусный", "Состав сета самый вкусный.");
-    }
 
-    public RestaurantDoc initRestaurant(String title, String description) {
-        RestaurantDoc doc = new RestaurantDoc();
-
-        doc.setTitle(title);
-        doc.setDescription(description);
-        doc.setPicId(new ObjectId());
-        doc.getPoint().setLatitude(0.0);
-        doc.getPoint().setLongitude(0.0);
-
-        return restaurantService.save(doc);
-    }
 
     @Test
     public void testAll() throws Exception {

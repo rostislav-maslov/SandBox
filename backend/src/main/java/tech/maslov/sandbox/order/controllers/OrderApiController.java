@@ -51,6 +51,6 @@ public class OrderApiController {
     @RequestMapping(value = OrderApiRoutes.COURIER_CLOSE_ALL, method = RequestMethod.POST)
     public BaseApiResponse<String> courierCloseAll(@RequestBody OrderCourierNextApiRequest request){
         orderApiService.closeAll(request);
-        return BaseApiResponse.of(HttpStatus.OK.toString());
+        return BaseApiResponse.of(HttpStatus.OK.getReasonPhrase());
     }
 }

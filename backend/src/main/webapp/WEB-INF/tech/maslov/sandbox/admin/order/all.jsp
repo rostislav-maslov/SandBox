@@ -32,7 +32,11 @@
                 <thead>
                 <tr>
 
-                    <th>Гость</th><th>Товары/корзина</th><th>Доставка</th><th>Оплата</th><th>Информация о заказе</th>
+                    <th>Номер заказа</th>
+                    <th>Тип доставки</th>
+                    <th>Статус заказа</th>
+                    <th>Гость</th>
+                    <th>Сумма</th>
                     <th>Дата создания</th>
                     <th>Дата изменения</th>
 
@@ -43,7 +47,11 @@
 
                 <c:forEach items="${search.result}" var="doc">
                     <tr>
-                        <td>${doc.clientInfo}</td><td>${doc.basket}</td><td>${doc.deliveryInfo}</td><td>${doc.paymentType}</td><td>${doc.orderInfo}</td>
+                        <td>${doc.number}</td>
+                        <td>${doc.deliveryInfo.type}</td>
+                        <td>${doc.deliveryInfo.status}</td>
+                        <td>${doc.clientInfo.phoneNumber}</td>
+                        <td>${doc.paymentInfo.total}</td>
                         <td><fmt:formatDate dateStyle="short" timeStyle="short" value="${doc.createdAt}"/></td>
                         <td><fmt:formatDate dateStyle="short" timeStyle="short" value="${doc.updateAt}"/></td>
 

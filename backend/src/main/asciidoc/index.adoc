@@ -115,7 +115,7 @@ include::{snippets}/category/all/curl-request.adoc[]
 
 ==== Поля запроса
 
-include::{snippets}/category/all/request-fields.adoc[]
+include::{snippets}/category/all/request-parameters.adoc[]
 
 ==== Пример ответа
 
@@ -138,7 +138,7 @@ include::{snippets}/product/all/curl-request.adoc[]
 
 ==== Поля запроса
 
-include::{snippets}/product/all/request-fields.adoc[]
+include::{snippets}/product/all/request-parameters.adoc[]
 
 ==== Пример ответа
 
@@ -161,7 +161,7 @@ include::{snippets}/restaurant/all/curl-request.adoc[]
 
 ==== Поля запроса
 
-include::{snippets}/restaurant/all/request-fields.adoc[]
+include::{snippets}/restaurant/all/request-parameters.adoc[]
 
 ==== Пример ответа
 
@@ -196,9 +196,6 @@ include::{snippets}/client/login/response-fields.adoc[]
 ==== Пример запроса
 include::{snippets}/client/get/curl-request.adoc[]
 
-==== Поля запроса
-include::{snippets}/client/get/request-fields.adoc[]
-
 ==== Пример ответа
 include::{snippets}/client/get/http-response.adoc[]
 
@@ -213,7 +210,7 @@ include::{snippets}/client/get/response-fields.adoc[]
 include::{snippets}/client/list/curl-request.adoc[]
 
 ==== Поля запроса
-include::{snippets}/client/list/request-fields.adoc[]
+include::{snippets}/client/list/request-parameters.adoc[]
 
 ==== Пример ответа
 include::{snippets}/client/list/http-response.adoc[]
@@ -246,9 +243,6 @@ include::{snippets}/courier/login/response-fields.adoc[]
 ==== Пример запроса
 include::{snippets}/courier/get/curl-request.adoc[]
 
-==== Поля запроса
-include::{snippets}/courier/get/request-fields.adoc[]
-
 ==== Пример ответа
 include::{snippets}/courier/get/http-response.adoc[]
 
@@ -262,11 +256,116 @@ include::{snippets}/courier/get/response-fields.adoc[]
 include::{snippets}/courier/list/curl-request.adoc[]
 
 ==== Поля запроса
-include::{snippets}/courier/list/request-fields.adoc[]
+include::{snippets}/courier/list/request-parameters.adoc[]
 
 ==== Пример ответа
 include::{snippets}/courier/list/http-response.adoc[]
 
 ==== Поля ответа
 include::{snippets}/courier/list/response-fields.adoc[]
+
+[[order]]
+== Заказы
+
+=== Создание заказа
+`POST` Пример создания заказа гостем
+
+==== Пример запроса на доставку
+include::{snippets}/order/create/delivery/curl-request.adoc[]
+
+==== Поля запроса на доставку
+include::{snippets}/order/create/delivery/request-fields.adoc[]
+
+==== Пример ответа на доставку
+include::{snippets}/order/create/delivery/http-response.adoc[]
+
+==== Поля ответа на доставку
+include::{snippets}/order/create/delivery/response-fields.adoc[]
+
+==== Пример запроса на самовывоз
+include::{snippets}/order/create/pickup/curl-request.adoc[]
+
+==== Поля запроса на самовывоз
+include::{snippets}/order/create/pickup/request-fields.adoc[]
+
+==== Пример ответа на самовывоз
+include::{snippets}/order/create/pickup/http-response.adoc[]
+
+==== Поля ответа на самовывоз
+include::{snippets}/order/create/pickup/response-fields.adoc[]
+
+=== Получение списка заказов
+`GET` Пример получения заказов
+
+==== Пример запроса
+include::{snippets}/order/list/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/order/list/request-parameters.adoc[]
+
+==== Пример ответа
+include::{snippets}/order/list/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/order/list/response-fields.adoc[]
+
+=== Получение списка заказов курьера
+`GET` Пример получения заказов для курьера
+
+==== Пример запроса
+include::{snippets}/order/courier/list/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/order/courier/list/request-parameters.adoc[]
+
+==== Пример ответа
+include::{snippets}/order/courier/list/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/order/courier/list/response-fields.adoc[]
+
+=== Изменение заказа курьером
+`POST` Пример изменения заказа курьером
+
+==== Пример запроса
+include::{snippets}/order/courier/set/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/order/courier/set/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/order/courier/set/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/order/courier/set/response-fields.adoc[]
+
+=== Получить следующий заказ на доставку
+`POST` Пример получение следующего заказа на доставку
+
+==== Пример запроса
+include::{snippets}/order/courier/next/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/order/courier/next/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/order/courier/next/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/order/courier/next/response-fields.adoc[]
+
+=== Закрыть все заказы курьера
+`POST` - закрытие всех заказов курьера
+
+==== Пример запроса
+include::{snippets}/order/courier/close/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/order/courier/close/request-fields.adoc[]
+
+==== Пример ответа
+include::{snippets}/order/courier/close/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/order/courier/close/response-fields.adoc[]
 

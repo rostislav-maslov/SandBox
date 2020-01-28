@@ -1,6 +1,9 @@
 package tech.maslov.sandbox.order.api.requests;
 
+import com.ub.core.json.mapper.ObjectIdSerializer;
 import org.bson.types.ObjectId;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.ser.std.StringSerializer;
 import tech.maslov.sandbox.base.models.Point;
 
 import java.util.ArrayList;
@@ -8,6 +11,7 @@ import java.util.List;
 
 public class OrderCreateApiRequest {
     public static class Product {
+        @JsonSerialize(using = ObjectIdSerializer.class)
         private ObjectId productId;
         private Integer count;
 
@@ -41,6 +45,7 @@ public class OrderCreateApiRequest {
     }
 
     public static class ClientInfo {
+        @JsonSerialize(using = ObjectIdSerializer.class)
         private ObjectId clientId;
         private String firstName;
         private Long phoneNumber;
@@ -150,6 +155,7 @@ public class OrderCreateApiRequest {
     public static class DeliveryInfo {
 
         private tech.maslov.sandbox.order.models.DeliveryInfo.TYPE type;
+        @JsonSerialize(using = ObjectIdSerializer.class)
         private ObjectId restaurantId;
         private Address address = new Address();
 

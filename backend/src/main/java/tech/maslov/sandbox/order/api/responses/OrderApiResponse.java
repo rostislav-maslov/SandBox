@@ -324,6 +324,7 @@ public class OrderApiResponse {
     }
 
     private String id;
+    private Long number;
     private ClientInfo clientInfo = new ClientInfo();
     private Basket basket = new Basket();
     private DeliveryInfo deliveryInfo = new DeliveryInfo();
@@ -376,5 +377,13 @@ public class OrderApiResponse {
 
     public void setOrderInfo(OrderInfo orderInfo) {
         this.orderInfo = orderInfo;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
     }
 }
