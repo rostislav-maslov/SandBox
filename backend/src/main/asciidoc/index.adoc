@@ -369,3 +369,35 @@ include::{snippets}/order/courier/close/http-response.adoc[]
 ==== Поля ответа
 include::{snippets}/order/courier/close/response-fields.adoc[]
 
+[[notifications]]
+== Уведомления
+
+=== Создание уведомления
+`POST` Пример создания уведомления для гостя
+
+==== Пример запроса на доставку
+include::{snippets}/notification/create/curl-request.adoc[]
+
+==== Поля запроса на доставку
+include::{snippets}/notification/create/request-fields.adoc[]
+
+==== Пример ответа на доставку
+include::{snippets}/notification/create/http-response.adoc[]
+
+==== Поля ответа на доставку
+include::{snippets}/notification/create/response-fields.adoc[]
+
+=== Получение уведомлений гостя
+`GET` Пример получения всех уведомлений гостя
+
+==== Пример запроса
+include::{snippets}/notification/list/curl-request.adoc[]
+
+==== Поля запроса
+include::{snippets}/notification/list/request-parameters.adoc[]
+
+==== Пример ответа
+include::{snippets}/notification/list/http-response.adoc[]
+
+==== Поля ответа
+include::{snippets}/notification/list/response-fields.adoc[]

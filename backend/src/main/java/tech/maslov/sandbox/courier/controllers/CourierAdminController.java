@@ -1,13 +1,8 @@
 package tech.maslov.sandbox.courier.controllers;
 
-import com.mongodb.gridfs.GridFSDBFile;
-import tech.maslov.sandbox.courier.models.CourierDoc;
-import tech.maslov.sandbox.courier.routes.CourierAdminRoutes;
-import tech.maslov.sandbox.courier.services.CourierService;
-import tech.maslov.sandbox.courier.views.all.SearchCourierAdminRequest;
-import tech.maslov.sandbox.courier.views.all.SearchCourierAdminResponse;
 import com.ub.core.base.utils.RouteUtils;
-import com.ub.core.file.services.FileService;
+import com.ub.core.base.views.breadcrumbs.BreadcrumbsLink;
+import com.ub.core.base.views.pageHeader.PageHeader;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,15 +11,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.ub.core.base.views.breadcrumbs.BreadcrumbsLink;
-import com.ub.core.base.views.pageHeader.PageHeader;
+import tech.maslov.sandbox.courier.models.CourierDoc;
+import tech.maslov.sandbox.courier.routes.CourierAdminRoutes;
+import tech.maslov.sandbox.courier.services.CourierService;
+import tech.maslov.sandbox.courier.views.all.SearchCourierAdminRequest;
+import tech.maslov.sandbox.order.models.OrderDoc;
+import tech.maslov.sandbox.order.services.OrderService;
+
+import java.util.List;
 
 @Controller
 public class CourierAdminController {
 
-    @Autowired private CourierService courierService;
+    @Autowired
+    private CourierService courierService;
+    @Autowired
+    private OrderService orderService;
 
     private PageHeader defaultPageHeader(String current) {
         PageHeader pageHeader = PageHeader.defaultPageHeader();
@@ -54,7 +57,11 @@ public class CourierAdminController {
     @RequestMapping(value = CourierAdminRoutes.EDIT, method = RequestMethod.GET)
     public String update(@RequestParam ObjectId id, Model model) {
         CourierDoc doc = courierService.findById(id);
+
+        List<OrderDoc> orderDocs = orderService.findByCourier(id);
+
         model.addAttribute("doc", doc);
+        model.addAttribute("orders", orderDocs);
         model.addAttribute("pageHeader", defaultPageHeader("Редактирование"));
         return "tech.maslov.sandbox.admin.courier.edit";
     }
@@ -62,7 +69,6 @@ public class CourierAdminController {
     @RequestMapping(value = CourierAdminRoutes.EDIT, method = RequestMethod.POST)
     public String update(@ModelAttribute("doc") CourierDoc doc,
                          RedirectAttributes redirectAttributes) {
-        courierService.save(doc);
         redirectAttributes.addAttribute("id", doc.getId());
         return RouteUtils.redirectTo(CourierAdminRoutes.EDIT);
     }

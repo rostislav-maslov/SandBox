@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <definition name="tech.maslov.sandbox.client.notification.client" template="/WEB-INF/tech/maslov/sandbox/client/notification.jsp">
+    </definition>
+
+    <!--ADMIN-->
+    <definition name="tech.maslov.sandbox.admin.notification.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/notification/all.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.notification.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/notification/add.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.notification.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/notification/edit.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.notification.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/tech/maslov/sandbox/admin/notification/delete.jsp"/>
+    </definition>
+    <definition name="tech.maslov.sandbox.admin.notification.modal.parent"
+        template="/WEB-INF/tech/maslov/sandbox/admin/notification/modalResponse.jsp">
+    </definition>
+
+</tiles-definitions>
