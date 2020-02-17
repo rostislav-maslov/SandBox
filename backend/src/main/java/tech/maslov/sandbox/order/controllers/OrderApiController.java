@@ -22,6 +22,11 @@ public class OrderApiController {
         return BaseApiResponse.of(orderApiService.create(request));
     }
 
+    @RequestMapping(value = OrderApiRoutes.BY_ID, method = RequestMethod.GET)
+    public BaseApiResponse<OrderApiResponse> byId(@PathVariable ObjectId id){
+        return BaseApiResponse.of(orderApiService.byId(id));
+    }
+
     @RequestMapping(value = OrderApiRoutes.ROOT, method = RequestMethod.GET)
     public BaseApiResponse<ListApiResponse<OrderApiResponse>> list(
             @RequestParam(defaultValue = "20", required = false) Integer size,

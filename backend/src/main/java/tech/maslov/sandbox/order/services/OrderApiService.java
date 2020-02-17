@@ -2,6 +2,7 @@ package tech.maslov.sandbox.order.services;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -252,6 +253,11 @@ public class OrderApiService {
 
         orderService.save(orderDoc);
 
+        return transform(orderDoc);
+    }
+
+    public OrderApiResponse byId(ObjectId id) {
+        OrderDoc orderDoc = orderService.findById(id);
         return transform(orderDoc);
     }
 
