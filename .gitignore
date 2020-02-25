@@ -39,3 +39,4 @@ backend/src/main/webapp/WEB-INF/com/ub/core
 backend/src/main/webapp/WEB-INF/com/ub/twitter
 backend/src/main/webapp/WEB-INF/com/ub/linkedin
 backend/src/main/webapp/WEB-INF/com/ub/googletest.jsp
+index.html
